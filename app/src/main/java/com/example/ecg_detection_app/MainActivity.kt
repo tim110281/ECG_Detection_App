@@ -6,10 +6,10 @@ import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private var bluetoothLeScanner: BluetoothLeScanner? = null
     private var scanning = false
     // Stops scanning after 10 seconds.
-    private val SCAN_PERIOD: Long = 10000
+    private val SCAN_PERIOD: Long = 1000
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,13 +40,13 @@ class MainActivity : AppCompatActivity() {
 
         bluetoothLeScanner = bluetoothAdapter?.bluetoothLeScanner
 
-        var runnable = object:Runnable{
+        val doTask: Runnable = object : Runnable {
             override fun run() {
                 scanLeDevice()
+                Handler(Looper.getMainLooper()).postDelayed(this, 1000)
             }
         }
-        Handler(Looper.getMainLooper()).postDelayed(runnable, 1000)
-
+        Handler(Looper.getMainLooper()).post(doTask)
     }
 
     // Device scan callback.
